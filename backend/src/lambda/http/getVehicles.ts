@@ -1,16 +1,16 @@
 import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
-import { TodoItem } from '../../models/TodoItem'
+import { VehicleItem } from '../../models/VehicleItem'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
 import { getUserId } from '../utils';
-import { getTodos } from '../../businessLogic/todos';
+import { getVehicles } from '../../businessLogic/vehiclesBussinessLogic';
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const userId = getUserId(event);
     try {
-      const todos: TodoItem[] = await getTodos(userId);
+      const todos: VehicleItem[] = await getVehicles(userId);
       if (todos) {
         return {
           statusCode: 200,
@@ -30,7 +30,7 @@ export const handler = middy(
         body: null
       }
     }
-    catch {
+    catch (err){
       return {
         statusCode: 500,
         headers: {
@@ -38,7 +38,7 @@ export const handler = middy(
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-          message: 'error while getting todo'
+          message: err
         })
       }
     }

@@ -1,10 +1,12 @@
 export interface VehicleItem {
     userId: string
-    todoId: string
-    createdAt: string
-    name: string
-    dueDate: string
-    done: boolean
+    vehicleId: string
+    make: string
+    model: string
+    year: string
+    color: string
+    VIN: string
+    createdAt: String
     attachmentUrl?: string
   }
   

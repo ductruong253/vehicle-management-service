@@ -2,15 +2,15 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
-import { deleteTodo } from '../../businessLogic/todos'
+import { deleteVehicle } from '../../businessLogic/vehiclesBussinessLogic'
 import { getUserId } from '../utils'
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const todoId = event.pathParameters.todoId
+    const vehicleId = event.pathParameters.vehicleId
     const userId = getUserId(event)
     try {
-      await deleteTodo(userId, todoId)
+      await deleteVehicle(userId, vehicleId)
       return {
         statusCode: 200,
         headers: {
@@ -18,11 +18,11 @@ export const handler = middy(
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-          path: 'deleteTodo',
-          message: todoId
+          path: 'deleteVehicle',
+          message: vehicleId
         })
       }
-    } catch {
+    } catch (err){
       return {
         statusCode: 500,
         headers: {
@@ -30,7 +30,7 @@ export const handler = middy(
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({
-          message: 'Delete todo failed'
+          message: err
         })
       }
     }

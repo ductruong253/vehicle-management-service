@@ -24,8 +24,7 @@ provider:
   # Use these variables in the functions and resources section below. For example,
   # ${self:provider.environment.ATTACHMENT_S3_BUCKET}
   environment:
-    VEHICLES_TABLE: Todos-${self:provider.stage}
-    VEHICLES_CREATED_AT_INDEX: CreatedAtIndex
+    VEHICLES_TABLE: Vehicles-${self:provider.stage}
     ATTACHMENT_S3_BUCKET: serverless-vms-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
 
@@ -184,9 +183,9 @@ resources:
           - AttributeName: vehicleId
             KeyType: RANGE
         LocalSecondaryIndexes:
-          - IndexName: ${self:provider.environment.VEHICLES_CREATED_AT_INDEX}
+          - IndexName: VIN_INDEX
             KeySchema:
-              - AttributeName: vehicleId
+              - AttributeName: userId
                 KeyType: HASH
               - AttributeName: VIN
                 KeyType: RANGE

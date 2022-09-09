@@ -3,22 +3,36 @@
   "title": "group",
   "type": "object",
   "properties": {
-    "name": {
-      "type": "string"
+    "make": {
+      "type": "string",
+      "minLength": 2,
+      "pattern": "^[^-\\s][a-zA-Z0-9_\\s-]+$"
     },
-    "vehicleType": {
-      "type": "string"
+    "model": {
+      "type": "string",
+      "minLength": 2,
+      "pattern": "^[^-\\s][a-zA-Z0-9_\\s-]+$"
+    },
+    "year": {
+      "type": "string",
+      "minLength": 4,
+      "pattern": "^[^-\\s][0-9]{3}+$"
     },
     "VIN": {
-      "type": "string"
+      "type": "string",
+      "pattern": "^[^-\\s][0-9]{1}[A-Z][0-9]-[0-9]{5}+$"
     },
-    "description": {
-      "type": "string"
+    "color": {
+      "type": "string",
+      "minLength": 2,
+      "pattern": "^[^-\\s][a-zA-Z0-9_\\s-]+$"
     }
   },
   "required": [
-    "name",
-    "vehicleType",
+    "make",
+    "model",
+    "year",
+    "color",
     "VIN"
   ],
   "additionalProperties": false

@@ -2,16 +2,16 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import 'source-map-support/register'
 import * as middy from 'middy'
 import { cors } from 'middy/middlewares'
-import { CreateTodoRequest } from '../../requests/CreateTodoRequest'
+import { CreateVehicleRequest } from '../../requests/CreateVehicleRequest'
 import { getUserId } from '../utils';
-import { createTodo } from '../../businessLogic/todos'
+import { createVehicle } from '../../businessLogic/vehiclesBussinessLogic'
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const newTodo: CreateTodoRequest = JSON.parse(event.body)
+    const newVehicle: CreateVehicleRequest = JSON.parse(event.body)
     const userId = getUserId(event)
     try {
-      const newCreatedTodo = await createTodo(userId, newTodo);
+      const newCreatedTodo = await createVehicle(userId, newVehicle);
     return {
       statusCode: 201,
       headers: {
@@ -28,7 +28,7 @@ export const handler = middy(
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Credentials': true
         },
-        body: JSON.stringify({message: 'error at controller'})
+        body: JSON.stringify({message: err})
       }
     }
   }

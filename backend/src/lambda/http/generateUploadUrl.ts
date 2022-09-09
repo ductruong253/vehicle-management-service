@@ -3,7 +3,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
 import { createLogger } from '../../utils/logger'
-import { generateUploadURL } from '../../businessLogic/todos'
+import { generateUploadURL } from '../../businessLogic/vehiclesBussinessLogic'
 import { getUserId } from '../utils'
 
 const logger = createLogger('todos')
@@ -33,7 +33,7 @@ export const handler = middy(
         },
         body: JSON.stringify({
           from: 'generateUploadURL',
-          message: 'failed to generate image upload url: '.concat(err.message)
+          message: err
         })
       }
     }
