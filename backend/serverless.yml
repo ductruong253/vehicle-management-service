@@ -46,10 +46,10 @@ custom:
     models:
       - name: CreateVehicleRequest
         contentType: 'application/json'
-        schema: ${file(models/create-vehicle-model.json)}
+        schema: ${file(./models/create-vehicle-model.json)}
       - name: UpdateVehicleRequest
         contentType: 'application/json'
-        schema: ${file(models/update-vehicle-model.json)}
+        schema: ${file(./models/update-vehicle-model.json)}
 
 functions:
   Auth:

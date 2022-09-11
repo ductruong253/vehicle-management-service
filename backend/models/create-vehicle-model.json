@@ -16,11 +16,11 @@
     "year": {
       "type": "string",
       "minLength": 4,
-      "pattern": "^[^-\\s][0-9]{3}+$"
+      "pattern": "^[^-\\s][0-9]{3}$"
     },
     "VIN": {
       "type": "string",
-      "pattern": "^[^-\\s][0-9]{1}[A-Z][0-9]-[0-9]{5}+$"
+      "pattern": "^[^-\\s][0-9]{1}[A-Z][0-9]-[0-9]{5}$"
     },
     "color": {
       "type": "string",
@@ -30,7 +30,7 @@
   },
   "required": [
     "make",
-    "model",
+    "vehicleModel",
     "year",
     "color",
     "VIN"

@@ -16,7 +16,7 @@
     "year": {
       "type": "string",
       "minLength": 4,
-      "pattern": "^[^-\\s][0-9]{3}+$"
+      "pattern": "^[^-\\s][0-9]{3}$"
     },
     "color": {
       "type": "string",
@@ -26,7 +26,7 @@
   },
   "required": [
     "make",
-    "model",
+    "vehicleModel",
     "year",
     "color"
   ],
