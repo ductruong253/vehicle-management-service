@@ -30,7 +30,7 @@
   },
   "required": [
     "make",
-    "vehicleModel",
+    "model",
     "year",
     "color",
     "VIN"

@@ -1,10 +1,8 @@
-import dateFormat from 'dateformat'
 import { History } from 'history'
 import update from 'immutability-helper'
 import * as React from 'react'
 import {
   Button,
-  Checkbox,
   Divider,
   Grid,
   Header,
@@ -93,58 +91,42 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
 
   onVehicleDelete = async (vehicleId: string) => {
     try {
-      await deleteTodo(this.props.auth.getIdToken(), todoId)
+      await deleteVehicle(this.props.auth.getIdToken(), vehicleId)
       this.setState({
-        todos: this.state.todos.filter(todo => todo.todoId !== todoId)
+        vehicles: this.state.vehicles.filter(vehicle => vehicle.vehicleId !== vehicleId)
       })
-    } catch {
-      alert('Todo deletion failed')
-    }
-  }
-
-  onTodoCheck = async (pos: number) => {
-    try {
-      const todo = this.state.todos[pos]
-      await patchTodo(this.props.auth.getIdToken(), todo.todoId, {
-        name: todo.name,
-        dueDate: todo.dueDate,
-        done: !todo.done
-      })
-      this.setState({
-        todos: update(this.state.todos, {
-          [pos]: { done: { $set: !todo.done } }
-        })
-      })
-    } catch {
+    } catch (err){
+      console.log(err)
       alert('Todo deletion failed')
     }
   }
 
   async componentDidMount() {
     try {
-      const todos = await getTodos(this.props.auth.getIdToken())
+      const vehicles = await getVehicles(this.props.auth.getIdToken())
       this.setState({
-        todos,
-        loadingTodos: false
+        vehicles,
+        loadingVehicles: false
       })
-    } catch (e) {
-      alert(`Failed to fetch todos: ${(e as Error).message}`)
+    } catch (err) {
+      console.log(err)
+      alert(`Failed to fetch todos: ${(err as Error).message}`)
     }
   }
 
   render() {
     return (
       <div>
-        <Header as="h1">TODOs</Header>
+        <Header as="h1">Vehicles</Header>
 
-        {this.renderCreateTodoInput()}
+        {this.renderCreateVehicleInput()}
 
-        {this.renderTodos()}
+        {this.renderVehicles()}
       </div>
     )
   }
 
-  renderCreateTodoInput() {
+  renderCreateVehicleInput() {
     return (
       <Grid.Row>
         <Grid.Column width={16}>
@@ -153,13 +135,13 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
               color: 'teal',
               labelPosition: 'left',
               icon: 'add',
-              content: 'New task',
-              onClick: this.onTodoCreate
+              content: 'Make',
+              onClick: this.onVehicleCreate
             }}
             fluid
             actionPosition="left"
-            placeholder="To change the world..."
-            onChange={this.handleNameChange}
+            placeholder="Vehicle make (manufacturer)"
+            onChange={this.handleMakeChange}
           />
         </Grid.Column>
         <Grid.Column width={16}>
@@ -169,47 +151,41 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
     )
   }
 
-  renderTodos() {
-    if (this.state.loadingTodos) {
+  renderVehicles() {
+    if (this.state.loadingVehicles) {
       return this.renderLoading()
     }
 
-    return this.renderTodosList()
+    return this.renderVehiclesList()
   }
 
   renderLoading() {
     return (
       <Grid.Row>
         <Loader indeterminate active inline="centered">
-          Loading TODOs
+          Loading Vehicles
         </Loader>
       </Grid.Row>
     )
   }
 
-  renderTodosList() {
+  renderVehiclesList() {
     return (
       <Grid padded>
-        {this.state.todos.map((todo, pos) => {
+        {this.state.vehicles.map((vehicle, pos) => {
           return (
-            <Grid.Row key={todo.todoId}>
-              <Grid.Column width={1} verticalAlign="middle">
-                <Checkbox
-                  onChange={() => this.onTodoCheck(pos)}
-                  checked={todo.done}
-                />
-              </Grid.Column>
+            <Grid.Row key={vehicle.vehicleId}>
               <Grid.Column width={10} verticalAlign="middle">
-                {todo.name}
+                {vehicle.make}
               </Grid.Column>
               <Grid.Column width={3} floated="right">
-                {todo.dueDate}
+                {vehicle.VIN}
               </Grid.Column>
-              <Grid.Column width={1} floated="right">
+              <Grid.Column width={2} floated="right">
                 <Button
                   icon
                   color="blue"
-                  onClick={() => this.onEditButtonClick(todo.todoId)}
+                  onClick={() => this.onEditButtonClick(vehicle.vehicleId)}
                 >
                   <Icon name="pencil" />
                 </Button>
@@ -218,13 +194,13 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
                 <Button
                   icon
                   color="red"
-                  onClick={() => this.onTodoDelete(todo.todoId)}
+                  onClick={() => this.onVehicleDelete(vehicle.vehicleId)}
                 >
                   <Icon name="delete" />
                 </Button>
               </Grid.Column>
-              {todo.attachmentUrl && (
-                <Image src={todo.attachmentUrl} size="small" wrapped />
+              {vehicle.attachmentUrl && (
+                <Image src={vehicle.attachmentUrl} size="small" wrapped />
               )}
               <Grid.Column width={16}>
                 <Divider />

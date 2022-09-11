@@ -4,7 +4,6 @@ import { createLogger } from '../utils/logger'
 import { VehicleItem } from '../models/VehicleItem'
 import { UpdateVehicleRequest } from '../requests/UpdateVehicleRequest'
 import { getS3PresignUrl } from '../attachment/attachementHelper'
-import { String } from 'aws-sdk/clients/batch'
 import * as uuid from 'uuid'
 
 const AWSXRay = require('aws-xray-sdk')
@@ -69,9 +68,13 @@ export class VehicleAccess {
         }).promise()
     }
 
-    getUploadURL = async (userId: string, vehicleId: string): Promise<String> => {
+    getUploadURL = async (userId: string, vehicleId: string): Promise<string> => {
         const imageId = uuid.v4()
         const presignedUrl = await getS3PresignUrl(imageId)
+        logger.log('info', presignedUrl)
+        logger.log('info', userId)
+        logger.log('info', vehicleId)
+        logger.log('info', imageId)
         this.docClient.update({
             TableName: this.vehiclesTable,
             Key: {
@@ -84,10 +87,10 @@ export class VehicleAccess {
             }
         }, (err, data) => {
             if (err) {
-                logger.log('error', 'Generating attachement presigned URL error: '.concat(err.message))
+                logger.log('error', 'Error: '.concat(err.message))
                 throw new Error(err.message)
             }
-            logger.log('info', 'Created presign URL: '.concat(JSON.stringify(data)))
+            logger.log('info', 'Created: '.concat(JSON.stringify(data)))
         })
         return presignedUrl
     }
