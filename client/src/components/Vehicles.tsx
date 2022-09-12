@@ -145,7 +145,7 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
             </Form.Field>
             <Form.Field>
               <label>VIN</label>
-              <input placeholder='Ex: 58F-12345' onChange={this.handleVINChange} />
+              <input placeholder='Ex: 58F1-12345' onChange={this.handleVINChange} />
             </Form.Field>
             <Form.Field>
               <label>Color</label>

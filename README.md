@@ -26,6 +26,6 @@ To register new vehicle, all the fields below should be provided:
 - Model: vehicle model
 - Year: version of the model coded by release year
 - Color: original vehicle paint color
-- VIN: vehicle identification number, should follow with the pattern like ##X-##### where # are the digits and X is a single letter.
+- VIN: vehicle identification number, should follow with the pattern like ##X#-##### where # are the digits and X is a single letter. (Ex: 58F1-12345)
 
 Note that all the field are not allowed to start with spaces and minimum length should be 2.
