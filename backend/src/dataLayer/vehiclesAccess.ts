@@ -3,7 +3,7 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb'
 import { createLogger } from '../utils/logger'
 import { VehicleItem } from '../models/VehicleItem'
 import { UpdateVehicleRequest } from '../requests/UpdateVehicleRequest'
-import { getS3PresignUrl } from '../attachment/attachementHelper'
+import { genPresignUrl } from '../attachment/attachementHelper'
 import * as uuid from 'uuid'
 
 const AWSXRay = require('aws-xray-sdk')
@@ -70,11 +70,7 @@ export class VehicleAccess {
 
     getUploadURL = async (userId: string, vehicleId: string): Promise<string> => {
         const imageId = uuid.v4()
-        const presignedUrl = await getS3PresignUrl(imageId)
-        logger.log('info', presignedUrl)
-        logger.log('info', userId)
-        logger.log('info', vehicleId)
-        logger.log('info', imageId)
+        const presignedUrl = await genPresignUrl(imageId)
         this.docClient.update({
             TableName: this.vehiclesTable,
             Key: {

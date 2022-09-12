@@ -1,7 +1,7 @@
 import { History } from 'history'
-import update from 'immutability-helper'
 import * as React from 'react'
 import {
+  Form,
   Button,
   Divider,
   Grid,
@@ -12,7 +12,7 @@ import {
   Loader
 } from 'semantic-ui-react'
 
-import { createVehicle, deleteVehicle, getVehicles, patchVehicle } from '../api/vehicles-api'
+import { createVehicle, deleteVehicle, getVehicles } from '../api/vehicles-api'
 import Auth from '../auth/Auth'
 import { Vehicle } from '../types/Vehicle'
 
@@ -66,7 +66,7 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
     this.props.history.push(`/vehicles/${vehicleId}/edit`)
   }
 
-  onVehicleCreate = async (event: React.ChangeEvent<HTMLButtonElement>) => {
+  onVehicleCreate = async () => {
     try {
       const newVehicle = await createVehicle(this.props.auth.getIdToken(), {
         make: this.state.newMake,
@@ -83,7 +83,7 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
         newVIN: '',
         newColor: '',
       })
-    } catch(err) {
+    } catch (err) {
       console.log(err)
       alert('Vehicle creation failed')
     }
@@ -95,7 +95,7 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
       this.setState({
         vehicles: this.state.vehicles.filter(vehicle => vehicle.vehicleId !== vehicleId)
       })
-    } catch (err){
+    } catch (err) {
       console.log(err)
       alert('Todo deletion failed')
     }
@@ -130,7 +130,30 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
     return (
       <Grid.Row>
         <Grid.Column width={16}>
-          <Input
+          <Form>
+            <Form.Field>
+              <label>Make</label>
+              <input placeholder='Honda, Toyota, ...' onChange={this.handleMakeChange} />
+            </Form.Field>
+            <Form.Field>
+              <label>Model</label>
+              <input placeholder='Airblade, Vios, ...' onChange={this.handleModelChange} />
+            </Form.Field>
+            <Form.Field>
+              <label>Year</label>
+              <input placeholder='2012, 2014, ...' onChange={this.handleYearChange} />
+            </Form.Field>
+            <Form.Field>
+              <label>VIN</label>
+              <input placeholder='Ex: 58F-12345' onChange={this.handleVINChange} />
+            </Form.Field>
+            <Form.Field>
+              <label>Color</label>
+              <input placeholder='Red black, ...' onChange={this.handleColorChange} />
+            </Form.Field>
+            <Button type='submit' primary onClick={this.onVehicleCreate}>Create</Button>
+          </Form>
+          {/* <Input
             action={{
               color: 'teal',
               labelPosition: 'left',
@@ -142,7 +165,7 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
             actionPosition="left"
             placeholder="Vehicle make (manufacturer)"
             onChange={this.handleMakeChange}
-          />
+          /> */}
         </Grid.Column>
         <Grid.Column width={16}>
           <Divider />
@@ -174,38 +197,49 @@ export class Vehicles extends React.PureComponent<VehiclesProps, VehiclesState> 
       <Grid padded>
         {this.state.vehicles.map((vehicle, pos) => {
           return (
-            <Grid.Row key={vehicle.vehicleId}>
-              <Grid.Column width={10} verticalAlign="middle">
-                {vehicle.make}
-              </Grid.Column>
-              <Grid.Column width={3} floated="right">
-                {vehicle.VIN}
-              </Grid.Column>
-              <Grid.Column width={2} floated="right">
-                <Button
-                  icon
-                  color="blue"
-                  onClick={() => this.onEditButtonClick(vehicle.vehicleId)}
-                >
-                  <Icon name="pencil" />
-                </Button>
-              </Grid.Column>
-              <Grid.Column width={1} floated="right">
-                <Button
-                  icon
-                  color="red"
-                  onClick={() => this.onVehicleDelete(vehicle.vehicleId)}
-                >
-                  <Icon name="delete" />
-                </Button>
-              </Grid.Column>
-              {vehicle.attachmentUrl && (
-                <Image src={vehicle.attachmentUrl} size="small" wrapped />
-              )}
-              <Grid.Column width={16}>
-                <Divider />
-              </Grid.Column>
-            </Grid.Row>
+            <>
+              <Grid.Row key={Math.random()}>
+                <Grid.Column width={4} verticalAlign="middle"><b>Description</b></Grid.Column>
+                <Grid.Column width={4} verticalAlign="middle"><b>VIN</b></Grid.Column>
+                <Grid.Column width={6} verticalAlign="middle"><b>Image</b></Grid.Column>
+                <Grid.Column width={2} verticalAlign="middle"><b>Actions</b></Grid.Column>
+              </Grid.Row>
+              <Grid.Row key={vehicle.vehicleId}>
+                <Grid.Column width={4} verticalAlign="middle">
+                  {vehicle.make + " " + vehicle.model + " " + vehicle.year} <br/>
+                  {vehicle.color}
+                </Grid.Column>
+                <Grid.Column width={4} floated="right" verticalAlign="middle">
+                  {vehicle.VIN}
+                </Grid.Column>
+                <Grid.Column width={6} floated="right" verticalAlign="middle">
+                  {vehicle.attachmentUrl && (
+                    <Image src={vehicle.attachmentUrl} size="medium" wrapped />
+                  )}
+                </Grid.Column>
+                <Grid.Column width={1} floated="right" verticalAlign="middle">
+                  <Button
+                    icon
+                    color="blue"
+                    onClick={() => this.onEditButtonClick(vehicle.vehicleId)}
+                  >
+                    <Icon name="pencil" />
+                  </Button>
+                </Grid.Column>
+                <Grid.Column width={1} floated="right" verticalAlign="middle">
+                  <Button
+                    icon
+                    color="red"
+                    onClick={() => this.onVehicleDelete(vehicle.vehicleId)}
+                  >
+                    <Icon name="delete" />
+                  </Button>
+                </Grid.Column>
+                <Grid.Column width={16}>
+                  <Divider />
+                </Grid.Column>
+              </Grid.Row>
+            </>
           )
         })}
       </Grid>

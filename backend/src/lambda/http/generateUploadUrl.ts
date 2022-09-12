@@ -6,15 +6,15 @@ import { createLogger } from '../../utils/logger'
 import { generateUploadURL } from '../../businessLogic/vehiclesBussinessLogic'
 import { getUserId } from '../utils'
 
-const logger = createLogger('todos')
+const logger = createLogger('generateUploadUrl')
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    const todoId = event.pathParameters.todoId
+    const vehicleId = event.pathParameters.vehicleId
     const userId = getUserId(event)
-    // TODO: Return a presigned URL to upload a file for a TODO item with the provided id
+    // TODO: Return a presigned URL to upload a file for a vehicle item with the provided id
     try {
-      const imageURL = await generateUploadURL(userId, todoId)
+      const imageURL = await generateUploadURL(userId, vehicleId)
       return {
         statusCode: 201,
         headers: {

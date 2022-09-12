@@ -7,7 +7,7 @@ const imageBucket = new XAWS.S3({
     signatureVersion: "v4",
 })
 
-export const getS3PresignUrl = async (imageId: string) => {
+export const genPresignUrl = async (imageId: string) => {
     const signedURL = await imageBucket.getSignedUrl("putObject", {
         Bucket: bucketName,
         Key: imageId,
